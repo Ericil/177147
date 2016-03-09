@@ -154,5 +154,5 @@ g.blocks[0][3].v = 2;
 g.print()
 g.mergeH(1);
 g.print();
-g.mergeH(1);
+g.mergeH();
 g.print();
