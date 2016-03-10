@@ -5,18 +5,20 @@ var ctx = the_canvas.getContext("2d");
 var grid;
 var started;
 
-
+var random0to3 = function random0to3(){
+    return Math.floor(Math.random() * 4);
+}
 var generate = function generate(){
     grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    var randomx1 = Math.floor(Math.random() * 4);
-    var randomy1 = Math.floor(Math.random() * 4);
-    var randomx2 = Math.floor(Math.random() * 4);
-    var randomy2 = Math.floor(Math.random() * 4);
+    var randomx1 = random0to3();
+    var randomy1 = random0to3();
+    var randomx2 = random0to3();
+    var randomy2 = random0to3();
     started = true;
     while (randomx1 == randomx2 && randomy1 == randomy2){
-	randomx2 = Math.floor(Math.random() * 4);
-	randomy2 = Math.floor(Math.random() * 4);
+	randomx2 = random0to3();
+	randomy2 = random0to3();
     }
     grid[randomx1][randomy1] = 3;
     grid[randomx2][randomy2] = 3;
