@@ -30,15 +30,33 @@ var generate = function generate(){
 	    if (grid[a][b] != 0){
 		ctx.fillStyle = "#FFA500";
 		ctx.fillRect(a * 100 + 8, b * 100 + 8, 84, 84);
-		ctx.font = "50px Sans-serif";
+		ctx.font = "bold 50px Sans-serif";
 		ctx.fillStyle = "white";
 		ctx.fillText(grid[a][b], a * 100 + 35, b * 100 + 68)
 	    }
+	    draw_rect(a, b);
 	}
     }
     ctx.closePath();
 }
-
+var draw_rect = function draw_rect(gridx, gridy){
+    var t_x = gridx * 100;
+    var t_y = gridy * 100;
+    ctx.beginPath();
+    ctx.strokeStyle = "#33bbff";
+    ctx.moveTo(t_x + 50, t_y + 8);
+    ctx.lineTo(t_x + 88, t_y + 8);
+    ctx.quadraticCurveTo(t_x + 92, t_y + 8, t_x + 92, t_y + 12);
+    ctx.lineTo(t_x + 92, t_y + 88);
+    ctx.quadraticCurveTo(t_x + 92, t_y + 92, t_x + 88, t_y + 92);
+    ctx.lineTo(t_x + 12, t_y + 92);
+    ctx.quadraticCurveTo(t_x + 8, t_y + 92, t_x + 8, t_y + 88);
+    ctx.lineTo(t_x + 8, t_y + 12);
+    ctx.quadraticCurveTo(t_x + 8, t_y + 8, t_x + 12, t_y + 8);
+    ctx.lineTo(t_x + 50, t_y + 8);
+    ctx.stroke();
+    ctx.closePath();
+}
 var restart = function restart(){
     if (started == true){
 	generate();
