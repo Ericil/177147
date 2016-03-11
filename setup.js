@@ -60,10 +60,17 @@ var draw_rect = function draw_rect(gridx, gridy){
     ctx.closePath();
 
 }
+
 var restart = function restart(){
     if (started == true){
 	generate();
     }
 }
-start_button.addEventListener("click", generate);
+
+var start = function start(){
+    if (started != true){
+	generate();
+    }
+}
+start_button.addEventListener("click", start);
 restart_button.addEventListener("click", restart);
