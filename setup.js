@@ -33,12 +33,14 @@ var pickRandom = function pickRandom(g){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var randomx1 = random0to3();
     var randomy1 = random0to3();
-    while (game.empty != 0 && g[randomx1][randomy1] != 0){
+    while (game.empty > 0 && g[randomx1][randomy1] != 0){
 	randomx1 = random0to3();
 	randomy1 = random0to3();
     }
-    g[randomx1][randomy1] = 3;
-    drawGrid();
+    if (game.empty > 0){
+	g[randomx1][randomy1] = 3;
+	game.last
+    }
 }
 
 var drawGrid = function drawGrid(){
@@ -106,34 +108,36 @@ var pressed = function pressed(e){
 	return;
         //left
         case 37:
-	a = game.mergeV(1);
+	game.mergeV(1);
         break;
             
         //up
         case 38:
-	a = game.mergeH(1);
+	game.mergeH(1);
         break;
             
         //right
         case 39:
-	a = game.mergeV(0);
+	game.mergeV(0);
         break;
         
         //down
         case 40:
-	a = game.mergeH(0);
+	game.mergeH(0);
         break;
     }
-    if (a != 0){
-	pickRandom(game.blocks);
+    var t = game.print();
+    if (t != game.last){
+	pickRandom(game.grid);
 	game.empty -= 1;
+	game.last = game.print();
     }
     if (game.empty == 0){
 	if (game.losecheck() == 1){
-	    drawGrid();
 	    window.removeEventListener("keypress",pressed);
 	}
     }
+    drawGrid();
 }
 start_button.addEventListener("click", start);
 restart_button.addEventListener("click", restart);
