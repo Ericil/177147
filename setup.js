@@ -63,6 +63,10 @@ var drawTile = function drawTile(a, b, xcoord, ycoord){
 	ctx.fillStyle = "white";
 	ctx.fillText(grid[a][b], xcoord + 27, ycoord + 60);
     }
+    else {
+        ctx.fillStyle = "#a6a6a6";
+        ctx.fillRect(xcoord, ycoord, 84, 84);
+    }
     //draw_rect(a, b);
 }
 
