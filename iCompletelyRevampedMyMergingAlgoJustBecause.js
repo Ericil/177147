@@ -1,3 +1,9 @@
+var Tile = function(r,c,v){
+    this.r = r;
+    this.c = c;
+    this.v = v;
+}
+
 var Game = function(g){
     this.grid = g;
     this.moves = [];
@@ -34,34 +40,37 @@ Game.prototype.mergeV = function(d){ // 1 up
     for (var i = 0;i<4;i++){
 	var pt = start;
 	for (var j = start;j != end; j += dec){
-	    var k = this.grid[j][i];
-	    if (k==0){
+	    var k = new Tile(j,i,this.grid[j][i]);
+	    if (k.v==0){
 		continue;
 	    }
 	    if (q.length == 0){
 		q.push(k);
 	    } else {
-		if (q[0] == k){ // if q.push(new thing) == 3 merge elements then out, if not just push and stay
+		if (q[0].v == k.v){ // if q.push(new thing) == 3 merge elements then out, if not just push and stay
 		    if (q.push(k) == 3){
 			q = [];
-			this.grid[pt][i] = k*3;
+			this.grid[pt][i] = k.v*3;
+			this.moves.push([d+2,k.r,k.c,pt,i]);
 			pt += dec;
 			this.empty += 2;
 		    }
 		} else { // out the queue, put new stuff in
 		    while(q.length > 0){
-			this.grid[pt][i] = q.pop();
+			this.grid[pt][i] = q.pop().v;
+			this.moves.push([d+2,k.r,k.c,pt,i]);
 			pt += dec;
 		    }
 		    q.push(k);
 		}
 	    }
 	}
-	while(q.length > 0){
-	    this.grid[pt][i] = q.pop();
+	while(q.length > 0){ // take out anything remaining in stack
+	    this.grid[pt][i] = q.pop().v;
+	    this.moves.push([d+2,k.r,k.c,pt,i]);
 	    pt += dec;
 	}
-	while(pt > -1 && pt < 4){
+	while(pt > -1 && pt < 4){ // fill unfilled spots with zero
 	    this.grid[pt][i] = 0;
 	    pt += dec;
 	}
@@ -85,23 +94,25 @@ Game.prototype.mergeH = function(d){ // 1 left
     for (var i = 0;i<4;i++){
 	var pt = start;
 	for (var j = start;j != end; j += dec){
-	    var k = this.grid[i][j];
-	    if (k==0){
+	    var k = new Tile(i,j,this.grid[i][j]);
+	    if (k.v==0){
 		continue;
 	    }
 	    if (q.length == 0){
 		q.push(k);
 	    } else {
-		if (q[0] == k){ // if q.push(new thing) == 3 merge elements then out, if not just push and stay
+		if (q[0].v == k.v){ // if q.push(new thing) == 3 merge elements then out, if not just push and stay
 		    if (q.push(k) == 3){
 			q = [];
-			this.grid[i][pt] = k*3;
+			this.grid[i][pt] = k.v*3;
+			this.moves.push([d-1,k.r,k.c,i,pt]);
 			pt += dec;
 			this.empty += 2;
 		    }
 		} else { // out the queue, put new stuff in
 		    while(q.length > 0){
-			this.grid[i][pt] = q.pop();
+			this.grid[i][pt] = q.pop().v;
+			this.moves.push([d-1,k.r,k.c,i,pt]);
 			pt += dec;
 		    }
 		    q.push(k);
@@ -109,7 +120,8 @@ Game.prototype.mergeH = function(d){ // 1 left
 	    }
 	}
 	while(q.length > 0){
-	    this.grid[i][pt] = q.pop();
+	    this.grid[i][pt] = q.pop().v;
+	    this.moves.push([d-1,k.r,k.c,i,pt]);
 	    pt += dec;
 	}
 	while(pt > -1 && pt < 4){

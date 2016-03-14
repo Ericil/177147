@@ -39,7 +39,6 @@ var pickRandom = function pickRandom(g){
     }
     if (game.empty > 0){
 	g[randomx1][randomy1] = 3;
-	game.last
     }
 }
 
@@ -56,14 +55,15 @@ var drawGrid = function drawGrid(){
 var drawTile = function drawTile(a, b, xcoord, ycoord){
     ctx.fillStyle = "lightblue";
     ctx.fillRect(a * 100 + 8, b * 100 + 8, 84, 84);
+    draw_rect(a, b);
     if (grid[a][b] != 0){
 	ctx.fillStyle = "#FFA500";
 	ctx.fillRect(xcoord, ycoord, 84, 84);
 	ctx.font = "50px Sans-serif";
 	ctx.fillStyle = "white";
-	ctx.fillText(grid[a][b], a * 100 + 35, b * 100 + 68);
+	ctx.fillText(grid[a][b], xcoord + 27, ycoord + 60);
     }
-    draw_rect(a, b);
+    //draw_rect(a, b);
 }
 
 
@@ -123,7 +123,7 @@ var pressed = function pressed(e){
         
         //down
         case 40:
-	game.mergeH(0);
+	game.mergeH(3);
         break;
     }
     var t = game.print();
@@ -137,7 +137,11 @@ var pressed = function pressed(e){
 	    window.removeEventListener("keypress",pressed);
 	}
     }
-    drawGrid();
+    for (var i=0;i<game.moves.length;i++){
+	slide(game.moves[i][0],game.moves[i][1],game.moves[i][2],game.moves[i][3],game.moves[i][4]);
+    }
+    game.moves = [];
+    //drawGrid();
 }
 start_button.addEventListener("click", start);
 restart_button.addEventListener("click", restart);
