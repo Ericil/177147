@@ -25,8 +25,9 @@ var generate = function generate(){
     grid[randomx2][randomy2] = 3;
     game = new Game(grid);
     drawGrid();
-    window.removeEventListener("keypress", pressed);
-    window.addEventListener("keypress", pressed);
+    // window.removeEventListener("keypress", pressed);
+  //  window.addEventListener("keypress", pressed);
+    document.onkeydown = pressed; 
 }
 
 var pickRandom = function pickRandom(g){
@@ -64,10 +65,9 @@ var drawTile = function drawTile(a, b, xcoord, ycoord){
 	ctx.fillText(grid[a][b], xcoord + 27, ycoord + 60);
     }
     else {
-        ctx.fillStyle = "#a6a6a6";
-        ctx.fillRect(xcoord, ycoord, 84, 84);
+        draw_rect(a, b);
     }
-    //draw_rect(a, b);
+  
 }
 
 
@@ -106,28 +106,32 @@ var start = function start(){
 
 var pressed = function pressed(e){
     var a;
+    console.log("hello");
     switch(e.keyCode)
     {
-	default:
-	return;
+
         //left
         case 37:
-	game.mergeV(1);
+       
+	      game.mergeV(1);
         break;
             
         //up
         case 38:
-	game.mergeH(1);
+        
+	      game.mergeH(1);
         break;
             
         //right
         case 39:
-	game.mergeV(0);
+
+        game.mergeH(1);
         break;
         
         //down
         case 40:
-	game.mergeH(3);
+
+	      game.mergeH(3);
         break;
     }
     var t = game.print();
