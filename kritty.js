@@ -1,36 +1,40 @@
-var Block = function (x,y,v) {
-    this.x = x;
-    this.y = y;
-    this.v = v;
-};
-
-var Game = function(){
-    this.blocks = [];
+var Game = function(grid){
+    this.blocks = grid;
+    this.empty = 0;
     for(var i=0;i<4;i++){
-	this.blocks[i] = [new Block(i,0,0), new Block(i,1,0), new Block(i,2,0), new Block(i,3,0)]
+	for(var j=0;j<4;j++){
+	    if (grid[i][j] == 0){
+		this.empty += 1;
+	    }
+	}
     }
 }
 Game.prototype.mH = function(d,n){ //1 = left
+    var a = 0;
 	if(d==1){
 	    for(var i=1;i<4;i++){
-		if(this.blocks[n][i].v != 0){
+		if(this.blocks[n][i] != 0){
 		    var j = i-1;
 		    while(j>=0){
-			if(this.blocks[n][j].v != 0){
-			    if ( this.blocks[n][j].v == this.blocks[n][i].v ){
-				this.blocks[n][j].v += this.blocks[n][i].v;
-				this.blocks[n][i] = new Block(n,i,0);
+			if(this.blocks[n][j] != 0){
+			    if ( this.blocks[n][j] == this.blocks[n][i] ){
+				this.blocks[n][j] += this.blocks[n][i];
+				this.blocks[n][i] = 0;
+				a += 1;
+				this.empty += 1;
 			    } else {
-				this.blocks[n][j+1].v = this.blocks[n][i].v;
+				this.blocks[n][j+1] = this.blocks[n][i];
 				if (j+1 != i){
-				    this.blocks[n][i] = new Block(n,i,0);
+				    this.blocks[n][i] = 0;
+				    a += 1;
 				}
 			    }
 			    j = -1;
 			} else {
 			    if (j==0){
-				this.blocks[n][j].v = this.blocks[n][i].v;
-				this.blocks[n][i] = new Block(n,i,0);
+				this.blocks[n][j] = this.blocks[n][i];
+				this.blocks[n][i] = 0;
+				a += 1;
 			    }
 			    j -= 1;
 			}
@@ -39,24 +43,28 @@ Game.prototype.mH = function(d,n){ //1 = left
 	    }
 	} else {
 	    for(var i=2;i>=0;i--){
-		if(this.blocks[n][i].v != 0){
+		if(this.blocks[n][i] != 0){
 		    var j = i+1;
-		    while(j<=4){
-			if(this.blocks[n][j].v != 0){
-			    if ( this.blocks[n][j].v == this.blocks[n][i].v ){
-				this.blocks[n][j].v += this.blocks[n][i].v;
-				this.blocks[n][i] = new Block(n,i,0);
+		    while(j<4){
+			if(this.blocks[n][j] != 0){
+			    if ( this.blocks[n][j] == this.blocks[n][i] ){
+				this.blocks[n][j] += this.blocks[n][i];
+				this.blocks[n][i] = 0;
+				a += 1;
+				this.empty += 1;
 			    } else {
-				this.blocks[n][j-1].v = this.blocks[n][i].v;
+				this.blocks[n][j-1] = this.blocks[n][i];
 				if (j-1 != i){
-				    this.blocks[n][i] = new Block(n,i,0);
+				    this.blocks[n][i] = 0;
+				    a += 1;
 				}
 			    }
 			    j = 5;
 			} else {
-			    if (j==0){
-				this.blocks[n][j].v = this.blocks[n][i].v;
-				this.blocks[n][i] = new Block(n,i,0);
+			    if (j==3){
+				this.blocks[n][j] = this.blocks[n][i];
+				this.blocks[n][i] = 0;
+				a += 1;
 			    }
 			    j += 1;
 			}
@@ -64,28 +72,34 @@ Game.prototype.mH = function(d,n){ //1 = left
 		}
 	    }
 	}
+    return a;
 }
 Game.prototype.mV = function(d,n){ //1 = up
+    var a = 0;
 	if(d==1){
 	    for(var i=1;i<4;i++){
-		if(this.blocks[i][n].v != 0){
+		if(this.blocks[i][n] != 0){
 		    var j = i-1;
 		    while(j>=0){
-			if(this.blocks[j][n].v != 0){
-			    if ( this.blocks[j][n].v == this.blocks[i][n].v ){
-				this.blocks[j][n].v += this.blocks[i][n].v;
-				this.blocks[i][n] = new Block(i,n,0);
+			if(this.blocks[j][n] != 0){
+			    if ( this.blocks[j][n] == this.blocks[i][n] ){
+				this.blocks[j][n] += this.blocks[i][n];
+				this.blocks[i][n] = 0;
+				a += 1;
+				this.empty += 1;
 			    } else {
-				this.blocks[j+1][n].v = this.blocks[i][n].v;
+				this.blocks[j+1][n] = this.blocks[i][n];
 				if (j+1 != i){
-				    this.blocks[i][n] = new Block(i,n,0);
+				    this.blocks[i][n] = 0;
+				    a += 1;
 				}
 			    }
 			    j = -1;
 			} else {
 			    if (j==0){
-				this.blocks[j][n].v = this.blocks[i][n].v;
-				this.blocks[i][n] = new Block(i,n,0);
+				this.blocks[j][n] = this.blocks[i][n];
+				this.blocks[i][n] = 0;
+				a += 1;
 			    }
 			    j -= 1;
 			}
@@ -94,24 +108,28 @@ Game.prototype.mV = function(d,n){ //1 = up
 	    }
 	} else {
 	    for(var i=2;i>=0;i--){
-		if(this.blocks[i][n].v != 0){
+		if(this.blocks[i][n] != 0){
 		    var j = i+1;
-		    while(j<=4){
-			if(this.blocks[j][n].v != 0){
-			    if ( this.blocks[j][n].v == this.blocks[i][n].v ){
-				this.blocks[j][n].v += this.blocks[i][n].v;
-				this.blocks[i][n] = new Block(i,n,0);
+		    while(j<4){
+			if(this.blocks[j][n] != 0){
+			    if ( this.blocks[j][n] == this.blocks[i][n] ){
+				this.blocks[j][n] += this.blocks[i][n];
+				this.blocks[i][n] = 0;
+				a += 1;
+				this.empty += 1;
 			    } else {
-				this.blocks[j-1][n].v = this.blocks[i][n].v;
+				this.blocks[j-1][n] = this.blocks[i][n];
 				if (j-1 != i){
-				    this.blocks[i][n] = new Block(i,n,0);
+				    this.blocks[i][n] = 0;
+				    a += 1;
 				}
 			    }
 			    j = 5;
 			} else {
-			    if (j==0){
-				this.blocks[j][n].v = this.blocks[i][n].v;
-				this.blocks[i][n] = new Block(i,n,0);
+			    if (j==3){
+				this.blocks[j][n] = this.blocks[i][n];
+				this.blocks[i][n] = 0;
+				a += 1;
 			    }
 			    j += 1;
 			}
@@ -119,40 +137,56 @@ Game.prototype.mV = function(d,n){ //1 = up
 		}
 	    }
 	}
+    return a;
 }
 
 Game.prototype.mergeV = function(d){
-    this.mV(d,0);
-    this.mV(d,1);
-    this.mV(d,2);
-    this.mV(d,3);
+    return (this.mV(d,0)+
+	    this.mV(d,1)+
+	    this.mV(d,2)+
+	    this.mV(d,3)); 
 }
 Game.prototype.mergeH = function(d){
-    this.mH(d,0);
-    this.mH(d,1);
-    this.mH(d,2);
-    this.mH(d,3);
+    return (this.mH(d,0)+
+	    this.mH(d,1)+
+	    this.mH(d,2)+
+	    this.mH(d,3));
 }
 
 Game.prototype.print = function(){
 	var s = "";
 	for (var i=0;i<4;i++){
 	    for(var j=0;j<4;j++){
-		s += ""+this.blocks[i][j].v.toString() + " ";
+		s += ""+this.blocks[i][j].toString() + " ";
 	    }
 	    console.log(s);
 	    s = "";
 	}
+}
+
+Game.prototype.lose = function(){
+    for(var i=0;i<4;i++){
+	for(var j=0;j<4;j++){
+	    this.blocks[i][j] = ":(";
+	}
     }
-    
+}
 
-var g = new Game();
-
-g.blocks[0][0].v = 2;
-g.blocks[0][2].v = 2;
-g.blocks[0][3].v = 2;
-g.print()
-g.mergeH(1);
-g.print();
-g.mergeH(1);
-g.print();
+Game.prototype.losecheck = function(){
+    for(var i = 0;i<4;i++){
+	for(var j=0;j<4;j++){
+	    if (j != 3){
+		if (this.blocks[i][j] == this.blocks[i][j+1]){
+		    return 0;
+		}
+	    }
+	    if (i != 3){
+		if (this.blocks[i][j] == this.blocks[i+1][j]){
+		    return 0;
+		}
+	    }
+	}
+    }
+    this.lose();
+    return 1;
+}

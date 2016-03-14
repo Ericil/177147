@@ -3,6 +3,7 @@ var start_button = document.getElementById("start");
 var restart_button = document.getElementById("restart");
 var ctx = the_canvas.getContext("2d");
 var grid;
+var game;
 var started;
 
 var random0to3 = function random0to3(){
@@ -22,6 +23,27 @@ var generate = function generate(){
     }
     grid[randomx1][randomy1] = 3;
     grid[randomx2][randomy2] = 3;
+    game = new Game(grid);
+    drawGrid();
+    window.removeEventListener("keypress", pressed);
+    window.addEventListener("keypress", pressed);
+}
+
+var pickRandom = function pickRandom(g){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var randomx1 = random0to3();
+    var randomy1 = random0to3();
+    while (game.empty > 0 && g[randomx1][randomy1] != 0){
+	randomx1 = random0to3();
+	randomy1 = random0to3();
+    }
+    if (game.empty > 0){
+	g[randomx1][randomy1] = 3;
+	game.last
+    }
+}
+
+var drawGrid = function drawGrid(){
     ctx.beginPath();
     for (a = 0; a < 4;a++){
 	for (b = 0; b < 4;b++){
@@ -76,6 +98,46 @@ var start = function start(){
     if (started != true){
 	generate();
     }
+}
+
+var pressed = function pressed(e){
+    var a;
+    switch(e.keyCode)
+    {
+	default:
+	return;
+        //left
+        case 37:
+	game.mergeV(1);
+        break;
+            
+        //up
+        case 38:
+	game.mergeH(1);
+        break;
+            
+        //right
+        case 39:
+	game.mergeV(0);
+        break;
+        
+        //down
+        case 40:
+	game.mergeH(0);
+        break;
+    }
+    var t = game.print();
+    if (t != game.last){
+	pickRandom(game.grid);
+	game.empty -= 1;
+	game.last = game.print();
+    }
+    if (game.empty == 0){
+	if (game.losecheck() == 1){
+	    window.removeEventListener("keypress",pressed);
+	}
+    }
+    drawGrid();
 }
 start_button.addEventListener("click", start);
 restart_button.addEventListener("click", restart);
