@@ -127,8 +127,9 @@ var pressed = function pressed(e){
             
         //right
         case 39:
-        
-        window.alert("Uh oh! You're using the forbidden right key. This key isn't allowed for...reasons")
+
+	game.mergeV(-1);
+        //window.alert("Uh oh! You're using the forbidden right key. This key isn't allowed for...reasons")
         break;
         
         //down
