@@ -54,14 +54,17 @@ var drawGrid = function drawGrid(){
 }
 
 var drawTile = function drawTile(a, b, xcoord, ycoord){
+    // a and b actually determine the placement of the tile
+    // xcoord and ycoord determine what's written on the tile
     ctx.fillStyle = "lightblue";
     ctx.fillRect(a * 100 + 8, b * 100 + 8, 84, 84);
     draw_rect(a, b);
     if (grid[a][b] != 0){
-	ctx.fillStyle = "#FFA500";
-	ctx.fillRect(xcoord, ycoord, 84, 84);
-	ctx.font = "50px Sans-serif";
-	ctx.fillStyle = "white";
+        console.log("printing legit tile: " + "x: " + xcoord  + " y: " + ycoord);
+	      ctx.fillStyle = "#FFA500";
+	      ctx.fillRect(xcoord, ycoord, 84, 84);
+	      ctx.font = "50px Sans-serif";
+	      ctx.fillStyle = "white";
 	ctx.fillText(grid[a][b], xcoord + 27, ycoord + 60);
     }
     else {
@@ -112,25 +115,25 @@ var pressed = function pressed(e){
 
         //left
         case 37:
-       
+        console.log("left");
 	      game.mergeV(1);
         break;
             
         //up
         case 38:
-        
+        console.log("up");
 	      game.mergeH(1);
         break;
             
         //right
         case 39:
-
-        game.mergeH(1);
+        
+        window.alert("Uh oh! You're using the forbidden right key. This key isn't allowed for...reasons")
         break;
         
         //down
         case 40:
-
+        console.log("down");
 	      game.mergeH(3);
         break;
     }
@@ -146,7 +149,7 @@ var pressed = function pressed(e){
 	}
     }
     for (var i=0;i<game.moves.length;i++){
-	slide(game.moves[i][0],game.moves[i][1],game.moves[i][2],game.moves[i][3],game.moves[i][4]);
+	slide( game.moves[i][0], game.moves[i][1], game.moves[i][2], game.moves[i][3], game.moves[i][4]);
     }
     game.moves = [];
     //drawGrid();
